@@ -8,7 +8,20 @@ import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
 
+/**
+ * This class in use for requesting API call
+ */
 class SafeApiRequest() {
+
+    /**
+     * This is use to perform app API call using Coroutine
+     *
+     * @param T
+     * @param call
+     * @param successCallback
+     * @param errorCallback
+     * @param internetCallback
+     */
     fun <T : Any> apiRequest(
         call: suspend () -> Response<T>,
         successCallback: ((T?) -> Unit),

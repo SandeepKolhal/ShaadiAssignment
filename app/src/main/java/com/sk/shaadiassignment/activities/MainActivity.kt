@@ -57,10 +57,18 @@ class MainActivity : AppCompatActivity(), MatcherListAdapter.OnClickListener {
         })
     }
 
+    /**
+     * Set up recyclerview adapter to RecyclerView
+     *
+     */
     private fun setUpAdapter() {
         matchesList.adapter = matcherListAdapter
     }
 
+    /**
+     * This is used for to set all Observers related to MainActivityViewModel
+     *
+     */
     private fun setUpViewModelObservers() {
 
         mainActivityViewModel.isApiRunning.observe(this, { isRunning ->
@@ -82,6 +90,13 @@ class MainActivity : AppCompatActivity(), MatcherListAdapter.OnClickListener {
         })
     }
 
+
+    /**
+     * RecyclerView item button Click listener
+     *
+     * @param user
+     * @param position
+     */
     override fun onClick(user: Result, position: Int) {
         mainActivityViewModel.updateUser(user, position)
     }

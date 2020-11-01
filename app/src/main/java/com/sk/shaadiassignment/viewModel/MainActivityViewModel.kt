@@ -15,6 +15,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * MainActivityViewModel is a class that is responsible for preparing and managing the data for
+ * MainActivity to Display or update UI
+ *
+ * A ViewModel is always created in association with a scope (an fragment or an activity) and will
+ * be retained as long as the scope is alive. E.g. if it is an Activity, until it is
+ * finished.
+ *
+ * @param application
+ */
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     val isApiRunning = MutableLiveData<Boolean>()
@@ -39,6 +49,11 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         matchListLiveData.value = matchList
     }
 
+    /**
+     * get Match User List from server
+     *
+     * @param context
+     */
     fun getMatchersAPICall(context: Context) {
         isApiRunning.value = true
         val call = RetrofitFactory.makeRetrofitService(context)
@@ -62,6 +77,11 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             })
     }
 
+    /**
+     * Insert user list in database
+     *
+     * @param list
+     */
     private fun insertUserIntoDatabase(list: List<Result>) {
         viewModelScope.launch(Dispatchers.IO) {
             for (i in list.indices) {
@@ -76,6 +96,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
+    /**
+     * get latest inserted User list from database
+     *
+     */
     private fun getInsertedUserFromDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
             val list = matchUserRepositories.getUsers(10, matchList.size)
@@ -87,6 +111,11 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
+    /**
+     * get All user from database using limit and offset
+     *
+     * @param context
+     */
     fun getAllUserFromDatabase(context: Context) {
         isApiRunning.value = true
         viewModelScope.launch(Dispatchers.IO) {
@@ -103,6 +132,13 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
+
+    /**
+     * update user declined or accepted status in database
+     *
+     * @param user
+     * @param position
+     */
     fun updateUser(user: Result, position: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             matchUserRepositories.updateUser(user)

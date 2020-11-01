@@ -31,6 +31,11 @@ class MatcherListAdapter(
     private val matchUserDao = db.matchUserDao()
     private val repo = MatchUserRepositories(matchUserDao)
 
+    /**
+     * Set Updated list to adapter and notify Adapter
+     *
+     * @param list
+     */
     fun setData(list: List<Result>) {
         matcherList = list
         notifyDataSetChanged()
@@ -124,24 +129,52 @@ class MatcherListAdapter(
         }
     }
 
+    /**
+     * Return String user age and gender from data
+     *
+     * @param data
+     * @return
+     */
     private fun getUserAgeGender(data: Result): String {
         val ageGender = StringBuilder()
         ageGender.append(data.gender).append(", ").append(data.dob?.age)
         return ageGender.toString()
     }
 
+    /**
+     * get Status of user is accepted or Declined from database
+     *
+     * @param data
+     * @return
+     */
     private suspend fun getDeclineAcceptStatus(data: Result): Int {
         return repo.getDeclineRejectedStatus(data.uuid)
     }
 
+    /**
+     * Load user image from URL using glide
+     * Set image thumbnail until high image load
+     *
+     * @param userImage
+     * @param data
+     */
     private fun loadUserImage(userImage: ImageView?, data: Result) {
         userImage?.let {
             Glide.with(context).load(data.picture?.large)
-                .thumbnail(Glide.with(context).load(data.picture?.thumbnail))
+                .thumbnail(
+                    Glide.with(context).load(data.picture?.thumbnail)
+                )
                 .into(it)
         }
     }
 
+
+    /**
+     * Return string User address form data
+     *
+     * @param data
+     * @return
+     */
     private fun getUserAddress(data: Result): String {
         val description = StringBuilder()
         description.append(data.location?.city).append(", ")
@@ -149,6 +182,12 @@ class MatcherListAdapter(
         return description.toString()
     }
 
+    /**
+     * Return string user name from data
+     *
+     * @param data
+     * @return
+     */
     private fun getUserName(data: Result): String {
         val name = StringBuilder()
         name.append(data.name?.title).append(". ").append(data.name?.first).append(" ")
@@ -158,6 +197,10 @@ class MatcherListAdapter(
 
     override fun getItemCount(): Int = matcherList.size
 
+    /**
+     * RecyclerView Click Listeners
+     *
+     */
     interface OnClickListener {
         fun onClick(user: Result, position: Int)
     }

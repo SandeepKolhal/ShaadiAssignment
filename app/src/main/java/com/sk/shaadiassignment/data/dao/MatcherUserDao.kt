@@ -19,19 +19,25 @@ interface MatcherUserDao {
 
 
     /**
-     * Update accepted and decline user
+     * Update accepted or decline user
      * @param user
      */
     @Update
     suspend fun updateUser(user: Result)
 
     /**
-     * Get match users
+     * Query to get match users with limit and offset
      * @return
      */
     @Query("SELECT * FROM matcherUsers LIMIT :limit OFFSET :offset")
     suspend fun getMatchUsers(limit: Int, offset: Int): List<Result>
 
+    /**
+     * Query to return user's declined and accepted status
+     *
+     * @param uuid
+     * @return
+     */
     @Query("select declineRejectedStatus from matcherUsers where user_id = :uuid")
     suspend fun getDeclineRejectedStatus(uuid: String): Int
 }

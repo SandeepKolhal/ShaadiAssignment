@@ -1,14 +1,16 @@
-package com.nitara.android.network
+package com.sk.shaadiassignment.network
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import com.sk.shaadiassignment.network.NoInternetException
 import okhttp3.Interceptor
 import okhttp3.Response
 
-
+/**
+ * This interceptor is used for internet connection in retrofit
+ * @param context
+ */
 class NetworkConnectionInterceptor(
     context: Context
 ) : Interceptor {
@@ -21,6 +23,11 @@ class NetworkConnectionInterceptor(
         return chain.proceed(chain.request())
     }
 
+    /**
+     * Check internet is available or not
+     *
+     * @return
+     */
     private fun isInternetAvailable(): Boolean {
         var result = false
         val connectivityManager =
